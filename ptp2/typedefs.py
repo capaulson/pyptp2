@@ -161,13 +161,13 @@ class CHDK_LV_Data(object):
 
 
         if self.vp_desc.data_start > 0 :
-            vp_size = self.vp_desc.buffer_width * self.vp_desc.visible_height * 6 / 4
+            vp_size = int(self.vp_desc.buffer_width * self.vp_desc.visible_height * 6 / 4)
             lb = self.vp_desc.data_start
             ub = lb + vp_size
             self.vp_data = fromstring(bytestr[lb:ub], 'B')
 
         if self.bm_desc.data_start > 0:
-            bm_size = self.bm_desc.buffer_width * self.bm_desc.visible_height
+            bm_size = int(self.bm_desc.buffer_width * self.bm_desc.visible_height)
             lb = self.bm_desc.data_start
             ub = lb + bm_size
             self.bm_data = fromstring(bytestr[lb:ub], 'B')
@@ -287,7 +287,7 @@ class DataContainer(_PyStructure):
         _PyStructure.__init__(self, header, endian='<')
 
         self.type = PTP_CONTAINER_TYPE.DATA
-        self._data = ''
+        self._data = b''
 
         if bytestr is not None:
             self.unpack(bytestr)
@@ -301,7 +301,14 @@ class DataContainer(_PyStructure):
     def pack(self):
         header = _PyStructure.pack(self)
 
-        return header + self.data
+        if isinstance(self.data, bytes):
+            return header + self.data
+
+        elif isinstance(self.data, str):
+            return header + self.data.encode()
+
+        else:
+            return header + self.data
 
     @property
     def data(self):
