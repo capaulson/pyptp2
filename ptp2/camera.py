@@ -4,10 +4,10 @@ import struct
 import time
 from os import path
 
-import util
-from typedefs import *
-from chdk_ptp_values import *
-from ptp_values import StandardResponses
+from ptp2 import util
+from ptp2.typedefs import *
+from ptp2.chdk_ptp_values import *
+from ptp2.ptp_values import StandardResponses
 
 __all__ = ['PTPCamera', 'CHDKCamera']
 

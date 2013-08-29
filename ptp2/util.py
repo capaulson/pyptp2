@@ -24,7 +24,7 @@ def get_ptp_interface(usb_device, interfaceClass=6):
 
 def list_ptp_cameras():
     usb_devices = usb.core.find(find_all=True)
-    return filter(get_ptp_interface, usb_devices)
+    return [get_ptp_interface(x) for x in usb_devices]
 
 
 def find_camera_by_serial(serial, partial_ok=False):
